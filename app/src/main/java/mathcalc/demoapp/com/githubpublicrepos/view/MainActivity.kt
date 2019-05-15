@@ -14,10 +14,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import mathcalc.demoapp.com.githubpublicrepos.PaginationScrollListener
 import mathcalc.demoapp.com.githubpublicrepos.R
+import mathcalc.demoapp.com.githubpublicrepos.UDF
 import mathcalc.demoapp.com.githubpublicrepos.adapter.RepositoryAdapter
 import mathcalc.demoapp.com.githubpublicrepos.model.ApiResponseModel
 import mathcalc.demoapp.com.githubpublicrepos.viewmodel.RepositoryViewModel
-import mathcalc.demoapp.com.githubpublicrepos.viewmodel.RepositoryViewModelFactory
 
 
 class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -98,13 +98,15 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
 
     private fun observeViewModel(pageCount: Int) {
-        viewModel = ViewModelProviders.of(this, RepositoryViewModelFactory(etSearch.text.toString(), pageCount, 10))
+        viewModel = ViewModelProviders.of(this)
             .get(RepositoryViewModel::class.java)
-
+        viewModel.refreshData(etSearch.text.toString(), pageCount, 20)
         viewModel.getRepositoryList().observe(this, Observer<List<ApiResponseModel>> { response ->
 
             run {
-                if (response != null) {
+                if (response != null && response.isNotEmpty()) {
+                    swipeRefresh.visibility = View.VISIBLE
+                    rlError.visibility = View.GONE
                     isLoading = false
                     apiResponseList = mutableListOf()
                     apiResponseList.addAll(response)
@@ -112,13 +114,24 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
                     rvPhotos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
                     rvPhotos.adapter = repositoryAdapter
                     swipeRefresh.isRefreshing = false
+                } else {
+                    if (UDF.isOnline(this)) {
+                        swipeRefresh.visibility = View.GONE
+                        rlError.visibility = View.VISIBLE
+                        tvErrorMessage.text = this.resources.getString(R.string.no_record_found)
+
+                    } else {
+                        swipeRefresh.visibility = View.GONE
+                        rlError.visibility = View.VISIBLE
+                        tvErrorMessage.text = this.resources.getString(R.string.check_internet_connection)
+                    }
                 }
             }
 
         })
     }
 
-    fun View.hideKeyboard() {
+    private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }

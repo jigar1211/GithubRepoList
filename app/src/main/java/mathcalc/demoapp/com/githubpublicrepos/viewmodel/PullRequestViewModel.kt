@@ -5,11 +5,18 @@ import android.arch.lifecycle.ViewModel
 import mathcalc.demoapp.com.githubpublicrepos.model.ApiRepsonseFoePullRequest
 import mathcalc.demoapp.com.githubpublicrepos.service.ProjectRepository
 
-class PullRequestViewModel(userName: String,repositoryName:String): ViewModel() {
+class PullRequestViewModel: ViewModel() {
 
-    private val repositoryListObservable = ProjectRepository.getInstance().getPullRequest(userName,repositoryName)
+    private lateinit var repositoryListObservable : LiveData<List<ApiRepsonseFoePullRequest>>
 
     fun getRepositoryList(): LiveData<List<ApiRepsonseFoePullRequest>> {
         return repositoryListObservable
+    }
+
+    /**
+     * Call API from the P
+     */
+    fun refreshData(userName: String, repositoryName:String) {
+        repositoryListObservable =ProjectRepository.getInstance().getPullRequest(userName,repositoryName)
     }
 }

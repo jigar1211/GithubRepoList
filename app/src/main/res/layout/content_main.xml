@@ -13,8 +13,7 @@
             android:layout_marginBottom="5dp"
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-    >
+            android:layout_height="match_parent">
 
 
         <android.support.v7.widget.RecyclerView
@@ -24,6 +23,22 @@
 
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+            android:id="@+id/rlError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+        <TextView android:id="@+id/tvErrorMessage"
+                  android:layout_width="match_parent"
+                  android:text=""
+                  android:gravity="center"
+                  android:textSize="24sp"
+                  android:textColor="@color/colorPrimary"
+                  android:textStyle="bold"
+                  android:layout_height="match_parent"/>
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>

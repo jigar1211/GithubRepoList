@@ -5,5 +5,10 @@
     <string name="request_title">Request Title:</string>
     <string name="created_at">Created at:</string>
     <string name="merge_at">Merge at:</string>
-    <string name="see_pull_request_details"><u>See pull request details ></u></string>
+    <string name="see_pull_request_details">
+        <u>See pull request details ></u>
+    </string>
+    <string name="no_record_found">No record Found</string>
+    <string name="no_pull_request_found">No Pull Request Found for</string>
+    <string name="check_internet_connection">Internet connection not found</string>
 </resources>

@@ -5,11 +5,22 @@ import android.arch.lifecycle.ViewModel
 import mathcalc.demoapp.com.githubpublicrepos.model.ApiResponseModel
 import mathcalc.demoapp.com.githubpublicrepos.service.ProjectRepository
 
-class RepositoryViewModel(userName: String,pagCount:Int,perPageCount:Int) : ViewModel() {
+class RepositoryViewModel : ViewModel() {
 
-    private val repositoryListObservable = ProjectRepository.getInstance().getRepository(userName,pagCount,perPageCount)
+    private lateinit var repositoryListObservable: LiveData<List<ApiResponseModel>>
 
     fun getRepositoryList(): LiveData<List<ApiResponseModel>> {
+
         return repositoryListObservable
     }
+
+    /**
+     * Call API from the P
+     */
+    fun refreshData(userName: String, pagCount: Int, perPageCount: Int) {
+        repositoryListObservable = ProjectRepository.getInstance().getRepository(userName, pagCount, perPageCount)
+    }
+
 }
+
+
