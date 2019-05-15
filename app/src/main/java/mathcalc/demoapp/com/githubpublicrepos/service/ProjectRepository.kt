@@ -6,6 +6,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import mathcalc.demoapp.com.githubpublicrepos.model.ApiRepsonseFoePullRequest
 import mathcalc.demoapp.com.githubpublicrepos.model.ApiResponseModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ProjectRepository {
 
-    private val BASE_URL = "https://api.github.com/users/"
+    private val BASE_URL = "https://api.github.com/"
     private var apiInterface: ApiInterface? = null
 
     init {
@@ -48,12 +49,33 @@ class ProjectRepository {
         }
     }
 
-    fun getRepository(userName: String): LiveData<List<ApiResponseModel>> {
+    fun getRepository(userName: String,pageCount:Int,perPageCount:Int): LiveData<List<ApiResponseModel>> {
 
         val data = MutableLiveData<List<ApiResponseModel>>()
 
         GlobalScope.launch(Dispatchers.Main) {
-            val result = apiInterface?.getRepositories(userName)
+            val result = apiInterface?.getRepositories(userName,pageCount,perPageCount)
+            try {
+                data.value = result!!.await()
+            } catch (e: HttpException) {
+                data.value = null
+                e.printStackTrace()
+            } catch (e: Throwable) {
+                data.value = null
+                e.printStackTrace()
+            }
+        }
+
+
+        return data
+    }
+
+    fun getPullRequest(userName: String,repositoryName:String): LiveData<List<ApiRepsonseFoePullRequest>> {
+
+        val data = MutableLiveData<List<ApiRepsonseFoePullRequest>>()
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val result = apiInterface?.getPullRequests(userName,repositoryName)
             try {
                 data.value = result!!.await()
             } catch (e: HttpException) {

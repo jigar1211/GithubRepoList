@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">gitHubPublicRepos</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="app_name">GithubPublicRepos</string>
+    <string name="search">Search</string>
+    <string name="request_status">Request Status:</string>
+    <string name="request_title">Request Title:</string>
+    <string name="created_at">Created at:</string>
+    <string name="merge_at">Merge at:</string>
+    <string name="see_pull_request_details"><u>See pull request details ></u></string>
 </resources>
